@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIT-AP University - Home</title>
+    <style>
+        /* Basic inline CSS for quick visualization and button positioning */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #ffffff; /* VIT's likely primary color */
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 250px;
+            height:75px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px; /* Space between the buttons */
+        }
+
+        .nav-buttons button {
+            background-color: #FFA500; /* A contrasting color for action buttons */
+            color: #003366;
+            border: none;
+            padding: 8px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-buttons button:hover {
+            background-color: #ff8c00;
+        }
+
+        .main-nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        .main-nav ul li a {
+            color: rgb(18, 18, 18);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .hero-section {
+            background-color: #e5e5e5;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .content-section {
+            padding: 20px;
+        }
+
+        footer{
+            margin-top: auto;
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 5px;
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <img src="logo.png">
+        </div>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#academics">Academics</a></li>
+                <li><a href="#admissions">Admissions</a></li>
+                <li><a href="#research">Research</a></li>
+                <li><a href="#campus">Campus Life</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-buttons">
+            <button onclick="location.href='registration.html'">Registration</button>
+            <button style="display:none" onclick="location.href='login.html'">Log In</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <h1>Welcome to VIT-AP University</h1>
+            <p>A place where innovation meets excellence.</p>
+            <img style="width:100%;height:500px" src ="vitap-campus.jpeg">
+        </section>
+
+        <section class="content-section">
+            <h2>Latest News & Updates</h2>
+            <p>Information about upcoming events, placements, and important notices will go here.</p>
+            <hr>
+
+            <h2>Why Choose VIT-AP?</h2>
+            <ul>
+                <li>Industry-relevant curriculum</li>
+                <li>State-of-the-art infrastructure</li>
+                <li>World-class faculty</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p >&copy; 2025 VIT-AP University. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
