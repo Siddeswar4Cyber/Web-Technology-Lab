@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Product Card</title>
+        <style>
+            .product-card{
+                width:250px;
+                border: 1px solid black;
+                padding: 20px;
+                margin: 20px;
+                box-shadow:0 4px 8px rgba(0,0,0,0.2);
+                text-align: center;
+                font-family: 'Times New Roman', Times, serif;
+            }
+            .product-card img{
+                width:100%;
+                height:auto;
+                margin-bottom: 10px;
+            }
+            .product-card h3{
+                margin:10px 0 5px
+            }
+            .product-card p{
+                font-size: 14px;
+                margin:5px 0;
+            }
+            .price{
+                font-size:20px;
+                font-weight: bold;
+                color:green ;
+                margin:10px 0;
+            }
+
+            .btn{
+                padding: 10px 15px;
+                background-color: orange;
+                color:white;
+                border: none;
+                cursor: pointer;
+            }
+            .btn:hover{
+                background-color: darkorange;
+            }
+        </style>
+    </head>
+    <body style="display: flex;justify-content: center;">
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?cs=srgb&dl=pexels-math-90946.jpg&fm=jpg" alt="Product Image">
+            <h3>Camera</h3>
+            <p>High-quailty Picture & 48MP nature Cameras</p>
+            <div class="price">₹49,999</div>
+            <button class="btn">Buy Now</button>
+        </div>
+        <div class="product-card">
+            <img src="https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg" alt="Product Image">
+            <h3>Running Shoes</h3>
+            <p>High-quailty Running Shoes with 2 years warranty</p>
+            <div class="price">₹2,999</div>
+            <button class="btn">Buy Now</button>
+        </div>
+    </body>
+</html>
