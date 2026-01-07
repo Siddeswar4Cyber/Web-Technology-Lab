@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Audio And Video HTML</title>
+        <style>
+            body{
+                display:flex;
+                background-color: #f4f4f4;
+                flex-direction: column;
+                align-items: center;
+            }
+            .media-container{
+                background-color: white;
+                padding:20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                margin-bottom: 30px;
+                width:100%;
+                max-width: 600px;
+            }
+            video{
+                width: 100%;
+                border-radius: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="media-container">
+            <h2>Audio</h2>
+            <audio id="myAudio" controls>
+                <source src="Who Are You - 4K Video Song  1Nenokkadine  Mahesh Babu, Kriti Sanon  DSP  Sukumar  Chandra Bose.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+        <div class="media-container">
+            <h2>Video</h2>
+            <video id="myVideo" controls >
+                <source src="318540_small.mp4" type="video/mp4">
+            </video>
+        </div>
+    </body>
+</html>

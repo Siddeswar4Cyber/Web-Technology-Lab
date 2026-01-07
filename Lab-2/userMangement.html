@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>User Management</title>
+        <style>
+            body{
+                background-color: #f4f4f4;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                display:flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+                margin: 0;
+            }
+            .container{
+                width: 100%;
+                max-width:900px;
+                background: white;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                margin-bottom: 10px;
+            }
+            h2 {
+                color:#333;
+            }
+            .form-grid{
+                display:grid;
+                grid-template-columns: 1fr 1fr;
+                gap:10px;
+            }
+            .input-group{
+                margin-bottom:15px;
+            }
+            label{
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 600;
+                color: #555;
+            }
+            input{
+                width:100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+
+            .full-width{
+                grid-column: span 2;
+            }
+
+            button{
+                padding: 12px 20px;
+                border:none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: opacity 0.2s;
+                margin-bottom: 30px;
+            }
+
+            button:hover{
+                opacity: 0.9;
+            }
+
+            .btn-submit{
+                background-color: #28a745;
+                color: white;
+                width:200%;
+                margin-top: 10px;
+            }
+            .btn-clear{
+                background-color: #dc3545;
+                color:white;
+                font:bold;
+                margin-bottom: 15px;
+            }
+            .btn-delete{
+                background-color: #dc3545;
+                color:white;
+                padding: 5px 10px;
+                font-size: 0.85em;
+            }
+
+            table{
+                width:100%;
+                border-collapse: collapse;
+                background-color: white;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+
+            th, td{
+                padding: 12px 15px;
+                text-align: left;
+                border-bottom: 1px solid #eee;
+            }
+            th{
+                background-color: #514c4c;
+                color: #ffffff;
+            }
+
+            /* #msg{
+                display: none;
+                color: rgb(200, 13, 13);
+                font-size: 14px;
+                font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+                margin-bottom: 0;
+            } */
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>User Registration</h2>
+            <form id="registration" class="form-grid">
+                <div class="input-group">
+                    <label for="fullname">Full Name*:</label>
+                    <input type="text" id="fullname" name="fullname" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email*:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="mobilenumber">Mobile Number*:</label>
+                    <input type="tel" id="mobilenumber" name="mobilenumber" placeholder="Must be 10 digits" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password*:</label>
+                    <input type="password" id="password" name="password" placeholder="Minimum length 8">
+                </div>
+                <!-- <p id="msg"></p> -->
+                <button type="submit" class="btn-submit">Register User</button>
+            </form>
+        </div>
+
+        <div class="container">
+            <div style="display: flex;justify-content: space-between;align-items: center;">
+                <h2>Registered Users</h2>
+                <button class="btn-clear" onclick="clearAllUsers()">Clear All Users</button>
+            </div>
+            <table id="userTable">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            const registrationForm = document.getElementById('registration');
+            const userTableBody = document.getElementById('userTableBody');
+            console.log(registrationForm, userTableBody);
+            document.addEventListener('DOMContentLoaded', displayUsers);
+
+            registrationForm.addEventListener('submit', (e) =>{
+                e.preventDefault();
+
+                const fullname = document.getElementById('fullname').value;
+                const email = document.getElementById('email').value;
+                const mobilenumber = document.getElementById('mobilenumber').value;
+                const password = document.getElementById('password').value;
+
+                if(mobilenumber.length !== 10){
+                    //display msg mobile number must be 10 digits
+                    document.querySelector('label[for="mobilenumber"]').style.color = "red";
+                    document.getElementById('mobilenumber').style.borderColor = "red";
+                    alert("Mobile number must be 10 digits long.");
+                    return;
+                }
+                
+                document.querySelector('label[for="mobilenumber"]').style.color = "#555";
+                document.getElementById('mobilenumber').style.borderColor = "#ddd";
+
+                document.querySelector('label[for="password"]').style.color = "#555";
+                document.getElementById('password').style.borderColor = "#ddd";
+                
+                if(password.length < 6){
+                    document.querySelector('label[for="password"]').style.color = "red";
+                    document.getElementById('password').style.borderColor = "red";
+                    alert("Password must be at least 6 characters long.");
+                    return;
+                }
+
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                const isDuplicate = users.some(user => user.email === email); 
+                
+                if(isDuplicate){
+                    alert("A user with this email already exists.");
+                    return;
+                }
+
+                const newUser = { fullname, email, mobilenumber, password };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+
+                registrationForm.reset();
+
+                displayUsers();
+                alert("User registered successfully!");
+            });
+
+            function displayUsers(){
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                userTableBody.innerHTML = '';
+
+                if(users.length === 0){
+                    userTableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#888; padding: 20px;"> No users registered.</td></tr>';
+                    return; 
+                }
+
+                users.forEach((user,index) => {
+                    const row =`
+                        <tr>
+                            <td>${user.fullname}</td>
+                            <td>${user.email}</td>
+                            <td>${user.mobilenumber}</td>
+                            <td><button onclick="deleteUser(${index})" class="btn-delete">Delete</button></td>
+                    `;
+                    userTableBody.innerHTML += row;
+                });
+            }
+
+            function deleteUser(index){
+                if(confirm("Are you sure you want to delete this user?")){
+                    let users = JSON.parse(localStorage.getItem('users')) || [];
+                    users.splice(index,1);
+                    localStorage.setItem('users', JSON.stringify(users));
+                    displayUsers();
+                }
+            }
+
+            function clearAllUsers(){
+
+                if(confirm("Are you sure you want to clear all users?")){
+                    localStorage.removeItem('users');
+                    displayUsers();
+                }
+            }
+        </script>
+    </body>
+</html>
