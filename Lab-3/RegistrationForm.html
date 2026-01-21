@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Adaptive Registration System</title>
+        <style>
+            body {
+                font-family:Arial, Helvetica, sans-serif;
+                width:400px;
+                margin:auto;
+            }
+
+            input,select,button {
+                width:100%;
+                margin-bottom: 10px;
+                padding:8px;
+            }
+
+            input.invalid, select.invalid {
+                border:2px solid red;
+            }
+
+            input.valid, select.valid  {
+                border:2px solid green;
+            }
+
+            button {
+                background-color: #2c7be5;
+                color: white;
+                border:none;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #1a5bb8;
+            }
+
+            p {
+                color:red;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h2>User Registration</h2>
+        <form id = "registration">
+            <label>Name</label>
+            <input type="text" id="name">
+
+            <label>Email</label>
+            <input type="email" id="email">
+
+            <label>Password</label>
+            <input type="password" id="password">
+
+            <label>Confirm Password</label>
+            <input type="password" id="confirmPassword">
+
+            <label> Age </label>
+            <input type="number" id="age">
+
+            <label>Role</label>
+            <select id="role">
+                <option value="">Select</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="Admin">Admin</option>
+            </select>
+
+            <div id="skillContainer" style="display:none">
+                <label>Skills</label>
+                <input type="text" id="skills" placeholder="Comma separated">
+            </div>
+            
+            <p display="none" id="errormsg"></p>
+            <button type="submit">Register</button>
+        </form>
+
+        <script>
+            console.log("Registration Form Script Loaded");
+            const form =document.getElementById('registration');
+            const role = document.getElementById('role');
+            const skillContainer = document.getElementById('skillContainer');
+
+            form.addEventListener("input", validateForm);
+            role.addEventListener("change", handleRoleChange);
+            console.log("Event listeners added");
+            function handleRoleChange() {
+                if(role.value === "teacher" || role.value === "Admin") {
+                    skillContainer.style.display = "block";
+                } else {
+                    skillContainer.style.display = "none";
+                }
+            }
+
+            function validateEmail(email){
+                const adminDomain = "admin.edu";
+                if(role.value === "Admin") {
+                    return email.endsWith(`@${adminDomain}`);
+                }
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            function validatePassword(password){
+                if(role.value === "student") {
+                    return password.length >= 6;
+                }
+                else if(role.value === "teacher") {
+                    return password.length >= 8 && /\d/.test(password);
+                }
+                else if(role.value === "Admin") {
+                    return password.length >= 10 && /\d/.test(password) && /[!@#$%^&*]/.test(password);
+                }
+                return false;
+            }
+
+            function markField(field, condition){
+                field.className = condition ? "valid" : "invalid";
+                return condition;
+            }
+            
+            const name = document.getElementById('name');
+
+            function validateForm(){
+                let valid = true;
+                valid &= markField(name, name.value !=="");
+                valid &= markField(email, validateEmail(email.value));
+                valid &= markField(password, validatePassword(password.value));
+                valid &= markField(confirmPassword, confirmPassword.value === password.value && confirmPassword.value !== "");
+                valid &= markField(role, role.value !== "");
+
+                const minAge = role.value === "admin" ? 25 :
+                                 role.value === "teacher" ? 21 : 16;
+                valid &= markField(age, age.value >= minAge);
+
+                return valid;
+            }
+
+
+            form.addEventListener("submit", function(event){
+                event.preventDefault();
+                if(validateForm()){
+                    form.reset();
+                    const msg = document.getElementById('errormsg');
+                    msg.style.display = "none";
+                    alert("Registration Successful!");
+
+                } else {
+                    const msg = document.getElementById('errormsg');
+                    console.log("Form validation failed");
+                    let errormsg = "Please correct the following error(s):\n";
+                    if(name.value === ""){
+                        errormsg += " Name cannot be empty.\n";
+                        console.log("Name validation failed");
+                    }
+                    if(validateEmail(email.value) === false){
+                        errormsg += " Invalid Email format.\n";
+                    }
+                    if(validatePassword(password.value) === false){
+                        errormsg += " Password does not meet criteria.\n";
+                    }
+                    if(confirmPassword.value !== password.value || confirmPassword.value === ""){
+                        errormsg += " Passwords do not match.\n";
+                    }
+                    if(role.value === ""){
+                        errormsg += " Role must be selected.\n";
+                    }
+
+                    msg.style.display = "block";
+                    msg.innerText = errormsg;
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi-Stage Client-Side Form</title>
+
+    <style>
+        body { font-family: Arial; }
+
+        .stage {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+        }
+
+        #progressBar {
+            width: 100%;
+            height: 20px;
+            background: #ddd;
+            margin-bottom: 20px;
+        }
+
+        #progress {
+            height: 100%;
+            width: 0%;
+            background: green;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Multi-Stage Registration Form</h2>
+
+<div id="progressBar">
+    <div id="progress">0%</div>
+</div>
+
+<form onsubmit="return submitForm()">
+
+<div class="stage" id="stage1">
+    <h3>Stage 1: Basic Details</h3>
+
+    Full Name:
+    <input type="text" id="name"><br><br>
+
+    Username:
+    <input type="text" id="username"><br>
+
+    <span class="error" id="err1"></span><br>
+
+    <button type="button" onclick="nextStage(1)">Next</button>
+</div>
+
+<div class="stage" id="stage2">
+    <h3>Stage 2: Contact Details</h3>
+
+    Email:
+    <input type="text" id="email"><br><br>
+
+    Mobile:
+    <input type="text" id="mobile"><br>
+
+    <span class="error" id="err2"></span><br>
+
+    <button type="button" onclick="prevStage()">Back</button>
+    <button type="button" onclick="nextStage(2)">Next</button>
+</div>
+
+<div class="stage" id="stage3">
+    <h3>Stage 3: Account Security</h3>
+
+    Password:
+    <input type="password" id="password"><br><br>
+
+    Confirm Password:
+    <input type="password" id="confirm"><br>
+
+    <span class="error" id="err3"></span><br>
+
+    <button type="button" onclick="prevStage()">Back</button>
+    <button type="button" onclick="nextStage(3)">Next</button>
+</div>
+
+<div class="stage" id="stage4">
+    <h3>Stage 4: Final Confirmation</h3>
+
+    Age:
+    <input type="number" id="age"><br><br>
+
+    <input type="checkbox" id="terms"> I agree to Terms & Conditions<br>
+
+    <span class="error" id="err4"></span><br>
+
+    <button type="button" onclick="prevStage()">Back</button>
+    <button type="submit">Submit</button>
+</div>
+
+</form>
+
+<script>
+let formData = {};
+let currentStage = 1;
+const totalStages = 4;
+
+showStage();
+
+function showStage() {
+    document.querySelectorAll(".stage").forEach(s => s.style.display = "none");
+    document.getElementById("stage" + currentStage).style.display = "block";
+}
+
+function updateProgress() {
+    let percent = ((currentStage - 1) / totalStages) * 100;
+    document.getElementById("progress").style.width = percent + "%";
+    document.getElementById("progress").innerText = percent + "%";
+}
+
+function validateStage(stage) {
+
+    if (stage === 1) {
+        let name = document.getElementById("name").value;
+        let username = document.getElementById("username").value;
+
+        if (name.length < 3 || username.length < 5) {
+            document.getElementById("err1").innerText =
+                "Name ≥ 3 chars & Username ≥ 5 chars required";
+            return false;
+        }
+
+        formData.name = name;
+        formData.username = username;
+        document.getElementById("err1").innerText = "";
+    }
+
+    if (stage === 2) {
+        let email = document.getElementById("email").value;
+        let mobile = document.getElementById("mobile").value;
+
+        let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        let mobilePattern = /^[0-9]{10}$/;
+
+        if (!emailPattern.test(email)) {
+            document.getElementById("err2").innerText = "Invalid email format";
+            return false;
+        }
+
+        if (!mobilePattern.test(mobile)) {
+            document.getElementById("err2").innerText = "Mobile must be 10 digits";
+            return false;
+        }
+
+        formData.email = email;
+        formData.mobile = mobile;
+        document.getElementById("err2").innerText = "";
+    }
+
+    if (stage === 3) {
+        let password = document.getElementById("password").value;
+        let confirm = document.getElementById("confirm").value;
+        let strong = /(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$])/;
+
+        if (!strong.test(password) || password.length < 6) {
+            document.getElementById("err3").innerText =
+                "Password must contain A-Z, 0-9 & symbol";
+            return false;
+        }
+
+        if (password !== confirm) {
+            document.getElementById("err3").innerText =
+                "Passwords do not match";
+            return false;
+        }
+
+        formData.password = password;
+        document.getElementById("err3").innerText = "";
+    }
+
+    if (stage === 4) {
+        let age = document.getElementById("age").value;
+        let terms = document.getElementById("terms").checked;
+
+        if (age < 18 || !terms) {
+            document.getElementById("err4").innerText =
+                "Age ≥ 18 and Terms must be accepted";
+            return false;
+        }
+
+        formData.age = age;
+        document.getElementById("err4").innerText = "";
+    }
+
+    return true;
+}
+
+function nextStage(stage) {
+    if (validateStage(stage)) {
+        currentStage++;
+        updateProgress();
+        showStage();
+    }
+}
+
+function prevStage() {
+    currentStage--;
+    updateProgress();
+    showStage();
+}
+
+function submitForm() {
+    if (!validateStage(4)) return false;
+
+    document.getElementById("progress").style.width = "100%";
+    document.getElementById("progress").innerText = "100%";
+
+    alert("Form Submitted Successfully!\n\n" +
+          JSON.stringify(formData, null, 2));
+    return false;
+}
+</script>
+
+</body>
+</html>

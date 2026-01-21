@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Activity Monitor</title>
+
+    <style>
+        body { font-family: Arial; }
+        #box {
+            border: 2px solid black;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        #log {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid gray;
+            padding: 10px;
+        }
+        .warning {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Real-Time User Activity Monitor</h2>
+
+<div id="box" tabindex="0">
+    Click, type, or focus here to generate activity
+    <br><br>
+    <button>Sample Button</button>
+    <input type="text" placeholder="Type something">
+</div>
+
+<p id="warning" class="warning"></p>
+
+<h3>Activity Log</h3>
+<div id="log"></div>
+
+<br>
+<button onclick="resetLog()">Reset Log</button>
+<button onclick="exportLog()">Export Log</button>
+
+<script>
+let activities = [];
+let clickCount = 0;
+const CLICK_LIMIT = 5;
+
+document.addEventListener("click", eventHandler, true);
+document.addEventListener("click", eventHandler, false);
+document.addEventListener("keydown", eventHandler);
+document.addEventListener("focusin", eventHandler);
+
+function eventHandler(e) {
+    let activity = {
+        type: e.type,
+        target: e.target.tagName,
+        phase: e.eventPhase === 1 ? "Capturing" :
+               e.eventPhase === 2 ? "Target" : "Bubbling",
+        time: new Date().toLocaleTimeString()
+    };
+
+    activities.push(activity);
+
+    if (e.type === "click") {
+        clickCount++;
+        if (clickCount > CLICK_LIMIT) {
+            document.getElementById("warning").innerText =
+                "⚠ Suspicious Activity: Too many clicks!";
+        }
+    }
+
+    displayLog();
+}
+
+function displayLog() {
+    let log = document.getElementById("log");
+    log.innerHTML = "";
+
+    activities.forEach((a, index) => {
+        log.innerHTML +=
+            `${index + 1}. [${a.time}] ${a.type.toUpperCase()}
+             on ${a.target} (${a.phase})<br>`;
+    });
+}
+
+function resetLog() {
+    activities = [];
+    clickCount = 0;
+    document.getElementById("log").innerHTML = "";
+    document.getElementById("warning").innerText = "";
+}
+
+function exportLog() {
+    let text = "User Activity Log\n\n";
+    activities.forEach((a, i) => {
+        text += `${i + 1}. ${a.time} - ${a.type} - ${a.target} - ${a.phase}\n`;
+    });
+
+    alert(text);
+}
+</script>
+
+</body>
+</html>
