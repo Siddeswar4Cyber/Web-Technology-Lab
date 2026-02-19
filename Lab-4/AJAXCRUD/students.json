@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "name":"siddhu",
+        "department":"CSE",
+        "marks": 95
+    },
+    {
+        "id": 2,
+        "name":"Alice",
+        "department":"ECE",
+        "marks": 85
+    },
+    {
+        "id": 3,
+        "name":"Bob",
+        "department":"MECH",
+        "marks": 78
+    },
+    {
+        "id": 4,
+        "name":"Charlie",
+        "department":"CSE",
+        "marks": 92
+    },
+    {
+        "id": 5,
+        "name":"David",
+        "department":"ECE",
+        "marks": 88
+    }
+]

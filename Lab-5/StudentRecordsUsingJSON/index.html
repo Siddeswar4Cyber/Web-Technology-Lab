@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Student Records Using JSON</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Student Records Using JSON</h1>
+    <div class="form-container">
+        <input type="text" id="studentID" placeholder="Student ID">
+        <input type="text" id="studentName" placeholder="Student Name">
+        <input type="text" id="studentCourse" placeholder="Student Course">
+        <input type="number" id="studentMarks" placeholder="Student Marks">
+        <button onclick="addStudent()">Add Student</button>
+    </div>
+
+    <p id="message"></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Course</th>
+                <th>Marks</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="studentsTable">
+            <!-- Student records will be added here dynamically -->
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+</html>

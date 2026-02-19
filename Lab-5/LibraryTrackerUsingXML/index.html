@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Library Tracker Using XML</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Library Tracker Using XML</h1>
+    <div class="form-container">
+        <input type="text" id="bookID" placeholder="Book ID">
+        <input type="text" id="bookTitle" placeholder="Title">
+        <input type="text" id="bookAuthor" placeholder="Author">
+        <select id="bookAvailability">
+            <option value="" selected>Select Availability</option>
+            <option value="Available">Available</option>
+            <option value="Not Available">Not Available</option>
+        </select>
+
+        <button onclick="addBook()">Add Book</button>
+    </div>
+    <p id="message"></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Book ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Availability</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="booksTable">
+            <!-- Book entries will be added here dynamically -->
+        </tbody>
+    </table>
+    <script src="script.js"></script>
+</body>
+</html>

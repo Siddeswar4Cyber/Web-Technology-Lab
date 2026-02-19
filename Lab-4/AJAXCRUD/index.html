@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>AJAX CRUD</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 20px;
+                padding:30px;
+                background-color: #f4f4f4;
+            }
+            input{
+                margin: 5px;
+                padding:6px;
+                border-radius:5px;
+            }
+            button{
+                padding: 6px 12px;
+                margin: 5px;
+                color: white;
+                border: none;
+                cursor: pointer;
+                border-radius:8px;
+            }
+            .edit-btn{
+                background-color: #28a745;
+            }
+            .delete-btn{
+                background-color: #dc3545;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-top: 20px;
+                border:none;
+                align-items: center;
+                text-align: center;
+            }
+            th, td {
+                border:none;
+                padding: 8px;
+            }
+            th {
+                background-color: #007BFF;
+                color: white;
+                font-size: 20px;
+            }
+            .success{
+                color:green;
+            }
+            .error{
+                color:red;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Student Management System using AJAX CRUD</h1>
+        <form id="student-form">
+            <input type="text" id="id" placeholder="ID" required>
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="department" placeholder="Department" required>
+            <input type="number" id="marks" placeholder="Marks" required>
+            <button onclick="addOrUpdateStudent()">Add/Update</button>
+        </form>
+        <p id="message"></p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Marks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="student-table-body"></tbody>
+                <!-- Student records will be dynamically inserted here -->
+        </table>
+        
+        <script src="script.js"></script>
+
+    </body>
+</html>

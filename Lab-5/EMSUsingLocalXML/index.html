@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EMS Using Local XML</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Employee Management System</h2>
+    <div class="form-container">
+        <input type="text" id="empID" placeholder="Employee ID">
+        <input type="text" id="empName" placeholder="Employee Name">
+        <input type="text" id="empDept" placeholder="Department">
+        <input type="text" id="empSalary" placeholder="Salary">
+        <button onclick="addEmployee()">
+            Add Employee
+        </button>
+
+        <p id="message"></p>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Salary</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTable"></tbody>
+        </table>
+        <script src="script.js"></script>
+    </div>
+</body>

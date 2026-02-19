@@ -1,0 +1,60 @@
+body{
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+h1 {
+    color: #333;
+}
+input {
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #218838;
+}
+.reset-btn {
+    background-color: #d65360;
+}
+.reset-btn:hover {
+    background-color: #c0392b;
+}
+.search-btn {
+    background-color: #007bff;
+}
+.search-btn:hover {
+    background-color: #0056b3;
+}
+.edit-btn {
+    background-color: #ffc107;
+}
+.edit-btn:hover {
+    background-color: #e0a800;
+}
+.delete-btn {
+    background-color: #dc3545;
+}
+.delete-btn:hover {
+    background-color: #c82333;
+}
+table {
+    width: 100%;
+    margin-top: 20px;
+}
+th,td {
+    padding: 10px;
+    text-align: left;;
+}

@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "name":"Siddhu",
+        "course":"CSE",
+        "marks": 95
+    },
+    {
+        "id": 2,
+        "name":"Alice",
+        "course":"ECE",
+        "marks": 85
+    },
+    {
+        "id": 3,
+        "name":"Bob",
+        "course":"CSE",
+        "marks": 90
+    },
+    {
+        "id": 4,
+        "name":"Charlie",
+        "course":"ME",
+        "marks": 80
+    },
+    {
+        "id": 5,
+        "name":"David",
+        "course":"CSE",
+        "marks": 88
+    }
+]

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #83a4d4, #b6fbff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .dashboard {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #cityInput {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #cityInput:focus {
+            border-color: #4a90e2;
+        }
+
+        #searchBtn {
+            padding: 0.75rem 1.5rem;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #searchBtn:hover {
+            background-color: #357abd;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4a90e2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .weather-info {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .weather-info.hidden {
+            display: none;
+        }
+
+        .city-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .temperature {
+            font-size: 2.5rem;
+            color: #4a90e2;
+            margin: 0.5rem 0;
+        }
+
+        .humidity, .condition {
+            font-size: 1.2rem;
+            color: #666;
+            margin: 0.3rem 0;
+        }
+
+        .error-message {
+            color: #d32f2f;
+            background: #ffcdd2;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Weather Dashboard</h1>
+        <div class="input-group">
+            <input type="text" id="cityInput" placeholder="Enter city name" value="London">
+            <button id="searchBtn">Search</button>
+        </div>
+
+        <!-- Loading spinner -->
+        <div class="spinner" id="spinner"></div>
+
+        <!-- Weather display area -->
+        <div class="weather-info hidden" id="weatherInfo">
+            <div class="city-name" id="cityName"></div>
+            <div class="temperature" id="temperature"></div>
+            <div class="humidity" id="humidity"></div>
+            <div class="condition" id="condition"></div>
+        </div>
+
+        <!-- Error message -->
+        <div class="error-message" id="errorMessage"></div>
+    </div>
+
+    <script>
+        // Cache object to store last searched city data
+        let weatherCache = {
+            city: '',
+            data: null
+        };
+
+        // DOM elements
+        const cityInput = document.getElementById('cityInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const spinner = document.getElementById('spinner');
+        const weatherInfo = document.getElementById('weatherInfo');
+        const cityName = document.getElementById('cityName');
+        const temperature = document.getElementById('temperature');
+        const humidity = document.getElementById('humidity');
+        const condition = document.getElementById('condition');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // OpenWeatherMap API configuration
+        const API_KEY = '05609e8375d0a58d619b7fad97e49685'; // Replace with your actual API key
+        const API_URL = 'https://api.openweathermap.org/data/2.5/weather';
+
+        // Event listener for search button
+        searchBtn.addEventListener('click', () => {
+            const city = cityInput.value.trim();
+            if (city) {
+                fetchWeather(city);
+            } else {
+                showError('Please enter a city name.');
+            }
+        });
+
+        // Allow pressing Enter in input field
+        cityInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchBtn.click();
+            }
+        });
+
+        // Function to fetch weather data
+        async function fetchWeather(city) {
+            // Hide previous results and errors
+            hideWeatherInfo();
+            hideError();
+            
+            // Check cache first
+            if (weatherCache.city.toLowerCase() === city.toLowerCase() && weatherCache.data) {
+                // Use cached data
+                displayWeather(weatherCache.data, city);
+                return;
+            }
+
+            // Show spinner
+            showSpinner();
+
+            try {
+                // Build URL with query parameters
+                const url = new URL(API_URL);
+                url.searchParams.append('q', city);
+                url.searchParams.append('appid', API_KEY);
+                url.searchParams.append('units', 'metric'); // For Celsius
+                console.log(url.toString()); // Debug: Check the constructed URL
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    // Handle HTTP errors (e.g., 404 city not found)
+                    if (response.status === 404) {
+                        throw new Error('City not found. Please check the name.');
+                    } else {
+                        throw new Error('Failed to fetch weather data. Please try again.');
+                    }
+                }
+
+                const data = await response.json();
+
+                // Update cache
+                weatherCache = {
+                    city: city,
+                    data: data
+                };
+
+                // Display weather data
+                displayWeather(data, city);
+
+            } catch (error) {
+                // Handle network errors or custom errors
+                showError(error.message);
+            } finally {
+                // Hide spinner
+                hideSpinner();
+            }
+        }
+
+        // Function to display weather data
+        function displayWeather(data, city) {
+            cityName.textContent = city;
+            temperature.textContent = `Temperature: ${Math.round(data.main.temp)}°C`;
+            humidity.textContent = `Humidity: ${data.main.humidity}%`;
+            condition.textContent = `Condition: ${data.weather[0].description}`;
+            
+            weatherInfo.classList.remove('hidden');
+        }
+
+        // Helper functions for UI state
+        function showSpinner() {
+            spinner.style.display = 'block';
+        }
+
+        function hideSpinner() {
+            spinner.style.display = 'none';
+        }
+
+        function hideWeatherInfo() {
+            weatherInfo.classList.add('hidden');
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        function hideError() {
+            errorMessage.style.display = 'none';
+            errorMessage.textContent = '';
+        }
+
+        // Optional: Load default city on page load (London)
+        window.addEventListener('load', () => {
+            fetchWeather('London');
+        });
+    </script>
+</body>
+</html>

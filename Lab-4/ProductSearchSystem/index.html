@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Product Search System</title>
+        <meta charset="UTF-8">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                padding:30px;
+                background-color: #f9f9f9;
+                
+            }
+
+            #app{
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+
+            h2 {
+                text-align: center;
+                color: #27b015;
+            }
+
+            #searchInput {
+                width:95%;
+                padding:10px;
+                font-size:16px;
+                border-radius:10px;
+            }
+
+            .product {
+                border: 1px solid #869eef;
+                border-radius:15px;
+                padding: 10px;
+                margin: 10px 0;
+                font-size: 14px;
+                display:flex;
+                justify-content: space-between;
+            }
+
+            .error {
+                color: red;
+                font-size: 18px;
+            }
+
+            .no-results {
+                color: gray;
+                font-size: 18px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <h2>Product Search System</h2>
+            <input type="text" id="searchInput" placeholder="Search products....">
+            <div id="results"></div>
+            <script src="script.js"></script>
+        </div>
+    </body>
+</html>
