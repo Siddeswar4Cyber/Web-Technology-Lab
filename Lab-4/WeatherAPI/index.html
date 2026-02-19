@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Weather Dashboard</title>
     <style>
         * {
@@ -21,39 +20,25 @@
             margin: 0;
         }
 
-        .dashboard {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            width: 350px;
-            text-align: center;
-        }
-
         h1 {
-            margin-bottom: 1.5rem;
+            margin-bottom: 5px;
             color: #333;
         }
 
         .input-group {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            gap: 5px;
+            margin-bottom: 20px;
         }
 
         #cityInput {
             flex: 1;
-            padding: 0.75rem;
+            padding: 10px;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
+            font-size: 15px;
         }
 
-        #cityInput:focus {
-            border-color: #4a90e2;
-        }
 
         #searchBtn {
             padding: 0.75rem 1.5rem;
@@ -68,22 +53,6 @@
 
         #searchBtn:hover {
             background-color: #357abd;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #4a90e2;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 1rem auto;
-            display: none;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .weather-info {
@@ -134,10 +103,6 @@
             <button id="searchBtn">Search</button>
         </div>
 
-        <!-- Loading spinner -->
-        <div class="spinner" id="spinner"></div>
-
-        <!-- Weather display area -->
         <div class="weather-info hidden" id="weatherInfo">
             <div class="city-name" id="cityName"></div>
             <div class="temperature" id="temperature"></div>
@@ -145,21 +110,13 @@
             <div class="condition" id="condition"></div>
         </div>
 
-        <!-- Error message -->
         <div class="error-message" id="errorMessage"></div>
     </div>
 
     <script>
-        // Cache object to store last searched city data
-        let weatherCache = {
-            city: '',
-            data: null
-        };
-
-        // DOM elements
+               
         const cityInput = document.getElementById('cityInput');
         const searchBtn = document.getElementById('searchBtn');
-        const spinner = document.getElementById('spinner');
         const weatherInfo = document.getElementById('weatherInfo');
         const cityName = document.getElementById('cityName');
         const temperature = document.getElementById('temperature');
@@ -167,11 +124,11 @@
         const condition = document.getElementById('condition');
         const errorMessage = document.getElementById('errorMessage');
 
-        // OpenWeatherMap API configuration
-        const API_KEY = '05609e8375d0a58d619b7fad97e49685'; // Replace with your actual API key
+        
+        const API_KEY = '05609e8375d0a58d619b7fad97e49685';
         const API_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
-        // Event listener for search button
+        
         searchBtn.addEventListener('click', () => {
             const city = cityInput.value.trim();
             if (city) {
@@ -181,41 +138,29 @@
             }
         });
 
-        // Allow pressing Enter in input field
         cityInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 searchBtn.click();
             }
         });
 
-        // Function to fetch weather data
+        
         async function fetchWeather(city) {
-            // Hide previous results and errors
+            
             hideWeatherInfo();
             hideError();
             
-            // Check cache first
-            if (weatherCache.city.toLowerCase() === city.toLowerCase() && weatherCache.data) {
-                // Use cached data
-                displayWeather(weatherCache.data, city);
-                return;
-            }
-
-            // Show spinner
-            showSpinner();
-
             try {
-                // Build URL with query parameters
+                
                 const url = new URL(API_URL);
                 url.searchParams.append('q', city);
                 url.searchParams.append('appid', API_KEY);
-                url.searchParams.append('units', 'metric'); // For Celsius
-                console.log(url.toString()); // Debug: Check the constructed URL
+                url.searchParams.append('units', 'metric');
+                console.log(url.toString());
 
                 const response = await fetch(url);
 
                 if (!response.ok) {
-                    // Handle HTTP errors (e.g., 404 city not found)
                     if (response.status === 404) {
                         throw new Error('City not found. Please check the name.');
                     } else {
@@ -225,25 +170,13 @@
 
                 const data = await response.json();
 
-                // Update cache
-                weatherCache = {
-                    city: city,
-                    data: data
-                };
-
-                // Display weather data
                 displayWeather(data, city);
 
             } catch (error) {
-                // Handle network errors or custom errors
                 showError(error.message);
-            } finally {
-                // Hide spinner
-                hideSpinner();
             }
         }
 
-        // Function to display weather data
         function displayWeather(data, city) {
             cityName.textContent = city;
             temperature.textContent = `Temperature: ${Math.round(data.main.temp)}°C`;
@@ -251,15 +184,6 @@
             condition.textContent = `Condition: ${data.weather[0].description}`;
             
             weatherInfo.classList.remove('hidden');
-        }
-
-        // Helper functions for UI state
-        function showSpinner() {
-            spinner.style.display = 'block';
-        }
-
-        function hideSpinner() {
-            spinner.style.display = 'none';
         }
 
         function hideWeatherInfo() {
@@ -276,7 +200,6 @@
             errorMessage.textContent = '';
         }
 
-        // Optional: Load default city on page load (London)
         window.addEventListener('load', () => {
             fetchWeather('London');
         });
