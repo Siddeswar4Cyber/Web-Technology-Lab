@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Book Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        h1 {
+            font-size: 36px;
+            background-color:antiquewhite;
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 16px;
+        }
+        #bookList div {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Online Book Finder</h1>
+    
+    <h2>Search for a Book</h2>
+    <input type="text" id="searchInput" placeholder="Enter book title or author">
+    <button onclick="searchBooks()">Search</button>
+
+    <h2>Filter Category</h2>
+    <label for="categorySelect">Select Category:</label>
+    <select id="categorySelect" onchange="filterByCategory()">
+        <option value="">All Categories</option>
+        <option value="Programming">Programming</option>
+        <option value="Machine Learning">Machine Learning</option>
+        <option value="Data Science">Data Science</option>
+        <option value="Web Development">Web Development</option>
+        <option value="Cyber Security">Cyber Security</option>
+    </select>
+
+    <h2>Sort</h2>
+    <button onclick="sortPrice()">Sort by Price</button>
+    <button onclick="sortRating()">Sort by Rating</button>
+
+    <h2>Top Rated Books</h2>
+    <button onclick="showTopRated()">Show Top Rated Books</button>
+
+    <h2>Book List</h2>
+    <div id="bookList"></div>
+    <button onclick="loadMore()">Load More</button>
+
+
+    <script>
+        function searchBooks() {
+            let title=document.getElementById('searchInput').value;
+            if(!title){
+                alert("Please enter a book title");
+                return;
+            }
+            fetch(`/books/search?title=${title}`)
+                .then(response => response.json())
+                .then(showBooks)
+                .catch(error => console.error('Error:', error));
+        }
+
+        function showBooks(data, append=false){
+
+            let html = ''
+
+            data.forEach(book => {
+                html += `<div>
+                            <h3>${book.title}</h3>
+                            <p>Author: ${book.author}</p>
+                            <p>Category: ${book.category}</p>
+                            <p>Price: $${book.price}</p>
+                            <p>Rating: ${book.rating}</p>
+                        </div>`;
+            });
+
+            if(append){
+                document.getElementById('bookList').innerHTML += html;
+            }else{
+                document.getElementById('bookList').innerHTML = html;
+            }
+        }
+
+        function filterByCategory() {
+            let category = document.getElementById('categorySelect').value;
+
+            if(category === ""){
+                fetch('/books')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('bookList').innerHTML = "";
+                    showBooks(data);
+                });
+                return;
+            }
+
+            fetch(`/books/category/${category}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('bookList').innerHTML = "";
+                    showBooks(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function sortPrice() {
+            fetch('/books/sort/price')
+                .then(response => response.json())
+                .then(showBooks)
+                .catch(error => console.error('Error:', error));
+        }
+
+        function sortRating() {
+            fetch('/books/sort/rating')
+                .then(response => response.json())
+                .then(showBooks)
+                .catch(error => console.error('Error:', error));
+        }
+
+        function showTopRated() {
+            fetch('/books/top')
+                .then(response => response.json())
+                .then(showBooks)
+                .catch(error => console.error('Error:', error));
+        }
+        let page=1
+        function loadMore() {
+            page++;
+            fetch(`/books?page=${page}`)
+                .then(response => response.json())
+                .then(data => showBooks(data, true))
+                .catch(error => console.error('Error:', error));
+        }
+        window.onload = function(){
+            fetch('/books')
+                .then(res => res.json())
+                .then(showBooks);
+        }
+    </script>
+</body>
+</html>

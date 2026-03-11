@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title> Student Notes Manager</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 20px;
+                background-color: #f4f4f4;
+                width: 100%;
+            }
+            h2 {
+                color: #333;
+                margin-bottom: 10px;
+            }
+            input, textarea {
+                width:300px;
+                padding:5px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            button {
+                padding: 10px 20px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .del-btn {
+                background-color: #dc3545;
+                margin-left: 10px;
+            }
+            .edit-btn {
+                background-color: #007bff;
+                margin-left: 10px;
+            }
+             table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-top: 20px;
+            }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+        </style>
+    </head>
+    <body>
+        <h2>Add Student Note</h2>
+
+        <input id="title" placeholder="Title">
+        <br>
+        <input id="subject" placeholder="Subject">
+        <br>
+        <textarea cols="20" rows="5" id="description" placeholder="Description"></textarea>
+        <br>
+        <br>
+        <button onclick="addNote()">Add Note</button>
+
+        <h2>All Notes</h2>
+        <div id="notes"></div>
+
+        <script>
+            function addNote() {
+                fetch("/notes",{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: document.getElementById("title").value,
+                        subject: document.getElementById("subject").value,
+                        description: document.getElementById("description").value
+                    })
+                }).then(
+                    response => response.json()
+                ).then(
+                    data => {
+                        console.log(data);
+                        alert("Note added successfully!");
+                        loadNotes();
+                    }        
+                )
+            }
+
+            function loadNotes(){
+                console.log("Loading notes...");
+                fetch("/notes")
+                .then(response => response.json())
+                .then(data => {
+                    
+                    let html = "";
+
+                    html = `<table cellpadding="10" width="95%" border="1">
+                        <tr>
+                            <th width="15%">Title</th>
+                            <th width="15%">Subject</th>
+                            <th width="50%">Description</th>
+                            <th width="20%">Action</th>
+                        </tr>
+                    `;
+                    data.forEach(element => {
+                        html+= `
+                        <tr>
+                            <td >${element.title}</td>
+                            <td>${element.subject}</td>
+                            <td>${element.description}</td>
+                            <td>
+                                <button class="del-btn" onclick="deleteNode('${element._id}')">Delete</button>
+                                <button class="edit-btn" onclick="updateNote('${element._id}')">Edit</button>
+                            </td>
+                        `;
+                        console.log("Loaded note:", element);
+                    });
+                    document.getElementById("notes").innerHTML = html;
+                })
+            }
+
+            loadNotes();
+
+            function deleteNode(id){
+                console.log("Deleting note with id:", id);
+                try {
+                    fetch(`/notes/${id}`,{
+                        method: "DELETE"
+                    }).then(
+                        response => response.json()
+                    ).then(
+                        data => {
+                            console.log(data);
+                            alert("Note deleted successfully!");
+                            loadNotes();
+                        }
+                    )
+                } catch (error) {
+                    console.error("Error deleting note:", error);
+                    alert("An error occurred while deleting the note.");
+                }
+            }
+
+            function updateNote(id){
+                console.log("Updating note with id:", id);
+                title = prompt("Enter new title:");
+                subject = prompt("Enter new subject:");
+                description = prompt("Enter new description:");
+                try {
+                    fetch(`/notes/${id}`,{
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            title: title,
+                            subject: subject,
+                            description: description
+                        })
+                    }).then(
+                        response => response.json()
+                    ).then(
+                        data => {
+                            console.log(data);
+                            alert("Note updated successfully!");
+                            loadNotes();
+                        }
+                    )
+                } catch (error) {
+                    console.error("Error updating note:", error);
+                    alert("An error occurred while updating the note.");
+                }
+            }
+            
+        </script>
+    </body>
+</html>
