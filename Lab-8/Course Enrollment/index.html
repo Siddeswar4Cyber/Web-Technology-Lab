@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Course Enrollment</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px;
+            background-color: rgb(16, 154, 80);
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius:10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Course Enrollment</h1>
+    <button onclick="displayCourseDetails()">Display Course Details</button>
+    <br><br>
+    <button onclick="enroll()">Enroll Course</button>
+    <br><br>
+    <div id="result"></div>
+    <script>
+        class Course{
+            constructor(courseName,Instructor){
+                this.courseName = courseName;
+                this.Instructor = Instructor;
+                this.seatsAvailable = 5;
+            }
+            displayCourseDetails(){
+                return `<b>Course Name:</b> ${this.courseName}<br><b>Instructor:</b> ${this.Instructor}<br><b>Seats Available:</b> ${this.seatsAvailable}`;
+            }
+        }
+        let course1 = new Course("Web Technologies","Dr.S GopiKrishnan");
+        function displayCourseDetails(){
+            document.getElementById("result").innerHTML = course1.displayCourseDetails();
+        }
+        function enroll(){
+            let enrollCourse = new Promise((resolve,reject) => {
+                if(course1.seatsAvailable > 0){
+                    course1.seatsAvailable--;
+                    resolve("Enrollment successful!");
+                }else{
+                    reject("Course Full.");
+                }
+            })
+            .then(msg => {
+                document.getElementById("result").innerHTML = "<br><b>" + msg+ "</b>";
+            })
+            .catch(err => {
+                document.getElementById("result").innerHTML = "<br><b>" + err + "</b>";
+            });
+        }
+    </script>
+</body>
+</html>

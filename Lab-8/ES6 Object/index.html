@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6 Object</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px;
+            background-color: rgb(16, 154, 80);
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius:10px;
+        }
+        h3 {
+            color: #333;
+        }
+        b {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Object</h1>
+    Student id:
+    <input type="number" id="studentId" value="101" placeholder="Student ID"><br>
+    Name:
+    <input type="text" id="studentName" value="Arun" placeholder="Student Name"><br>
+    Department:
+    <input type="text" id="studentDepartment" value="Computer Science" placeholder="Department"><br>
+    Marks:
+    <input type="number" id="studentMarks" value="92" placeholder="Marks">
+    <br>
+    <br>
+    <button onclick="runES6()">Run ES6 Function</button>
+    <div id="result"></div>
+        <script>
+            function runES6() {
+                const sid = document.getElementById('studentId').value;
+                const sname = document.getElementById('studentName').value;
+                const sdepartment = document.getElementById('studentDepartment').value;
+                const smarks = document.getElementById('studentMarks').value;
+                let html = '';
+                const student = {
+                    id: sid,
+                    name: sname,
+                    department: sdepartment,
+                    marks: smarks
+                };
+
+                const {id,name,department,marks} = student;
+                html += `<h3>Student Details:</h3>
+                            <b>Student ID: </b>${id}<br>
+                            <b>Name: </b>${name}<br>
+                            <b>Department: </b>${department}<br>
+                            <b>Marks: </b>${marks}`;
+                            
+                const grade = (marks) => {
+                    if(marks >= 90) return 'A';
+                    else if(marks >= 80) return 'B';
+                    else if(marks >= 70) return 'C';
+                    else if(marks >= 60) return 'D';
+                    else return 'F';
+                }
+
+                const updatedStudent = {
+                    ...student,
+                    grade: grade(marks)
+                };
+
+                html+=`<br><br>
+                <h3>Updated Student Details Grade:</h3>
+                <b>Student ID: </b>${updatedStudent.id}<br>
+                <b>Name: </b>${updatedStudent.name}<br>
+                <b>Department: </b>${updatedStudent.department}<br>
+                <b>Marks: </b>${updatedStudent.marks}<br>
+                <b>Grade: </b>${updatedStudent.grade}<br>
+                `;
+                document.getElementById('result').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

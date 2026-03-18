@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks</title>
+    <style>
+        body{
+            font-family: Arial,sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1{
+            color: #333;
+        }
+        input{
+            margin: 10px 0;
+            padding:8px;
+            width: 200px;
+            border-radius:5px;
+            border:1px solid #ccc;
+        }
+        button{
+            padding: 10px;
+            background-color: rgb(79, 168, 76);
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+
+        }
+
+        p{
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Marks</h1>
+    Student Name:
+    <input type="text" id="studentName" value="Arun" placeholder="Student Name">
+    <br>
+    <br>
+    Marks for Subject 1:
+    <input type="number" id="mark1" value="85" placeholder="Enter first mark">
+    <br>
+    Marks for Subject 2:
+    <input type="number" id="mark2" value="90" placeholder="Enter second mark">
+    <br>
+    Marks for Subject 3:
+    <input type="number" id="mark3" value="78" placeholder="Enter third mark">
+    <br>
+
+    <button onclick="runES6()">Run ES6 Function</button>
+    <br>
+
+    <p id="result"></p>
+    <script>
+        function runES6() {
+            const name = document.getElementById('studentName').value;
+            const mark1 = parseFloat(document.getElementById('mark1').value);
+            const mark2 = parseFloat(document.getElementById('mark2').value);
+            const mark3 = parseFloat(document.getElementById('mark3').value);
+
+            if (isNaN(mark1) || isNaN(mark2) || isNaN(mark3)) {
+                document.getElementById('result').textContent = 'Please enter valid marks.';
+                return;
+            }
+
+            const calculateAverage = (m1, m2, m3) => {
+                return (m1 + m2 + m3) / 3;
+            };
+            const calculateTotalMarks = (m1, m2, m3) => {
+                return m1 + m2 + m3;
+            };
+
+            let average = calculateAverage(mark1, mark2, mark3);
+            let total = calculateTotalMarks(mark1, mark2, mark3);
+            document.getElementById('result').innerHTML = `<b>Student Name: </b>${name}<br><b>Total Marks: </b>${total}<br><b>Average Mark: </b>${average.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
