@@ -1,0 +1,19 @@
+.app {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+}
+
+.card {
+  border: 1px solid #484747;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0;
+  background: white;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
